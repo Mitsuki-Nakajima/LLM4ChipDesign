@@ -1,0 +1,13 @@
+{
+    "general": {
+        "prompt": "abro_state_machine.sv",
+        "name": "abro_state_machine",
+        "testbench": "abro_state_machine_tb.v",
+        "iterations": 10,
+        "model_family": "ChatGPT",
+        "model_id": "gpt-4o-mini",
+        "num_candidates": 5,
+        "outdir": "outputs",
+        "log": "abro_state_machine.log"
+    }
+}

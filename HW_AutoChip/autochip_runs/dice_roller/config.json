@@ -1,0 +1,13 @@
+{
+    "general": {
+        "prompt": "dice_roller.sv",
+        "name": "dice_roller",
+        "testbench": "dice_roller_tb.v",
+        "iterations": 10,
+        "model_family": "ChatGPT",
+        "model_id": "gpt-4o-mini",
+        "num_candidates": 5,
+        "outdir": "outputs",
+        "log": "dice_roller.log"
+    }
+}

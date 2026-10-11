@@ -1,0 +1,13 @@
+{
+    "general": {
+        "prompt": "traffic_light.sv",
+        "name": "traffic_light_fsm",
+        "testbench": "traffic_light_tb.v",
+        "iterations": 10,
+        "model_family": "ChatGPT",
+        "model_id": "gpt-4o-mini",
+        "num_candidates": 5,
+        "outdir": "outputs",
+        "log": "traffic_light.log"
+    }
+}

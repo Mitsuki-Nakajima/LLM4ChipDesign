@@ -1,0 +1,115 @@
+#! /opt/homebrew/Cellar/icarus-verilog/13.0/bin/vvp
+:ivl_version "13.0 (stable)" "(v13_0)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision - 12;
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/13.0/lib/ivl/system.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/13.0/lib/ivl/vhdl_sys.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/13.0/lib/ivl/vhdl_textio.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/13.0/lib/ivl/v2005_math.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/13.0/lib/ivl/va_math.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/13.0/lib/ivl/v2009.vpi";
+S_0x155608b60 .scope package, "$unit" "$unit" 2 1;
+ .timescale 0 0;
+S_0x155608cd0 .scope module, "tb" "tb" 3 4;
+ .timescale -9 -12;
+v0x155621fa0_0 .var/s "a", 7 0;
+v0x155622050_0 .var/i "ai", 31 0;
+v0x1556220f0_0 .var "b", 7 0;
+v0x1556221c0_0 .var/i "bi", 31 0;
+v0x155622260_0 .var/s "expected", 15 0;
+v0x155622350_0 .var/i "mismatches", 31 0;
+v0x155622400_0 .net/s "p", 15 0, L_0x1556227e0;  1 drivers
+v0x1556224a0_0 .var/i "samples", 31 0;
+S_0x155607910 .scope module, "dut" "signed_unsigned_multiplier" 3 18, 4 1 0, S_0x155608cd0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 8 "a";
+    .port_info 1 /INPUT 8 "b";
+    .port_info 2 /OUTPUT 16 "p";
+v0x155611d80_0 .net *"_ivl_0", 15 0, L_0x155622540;  1 drivers
+L_0x158078010 .functor BUFT 1, C4<00000000>, C4<0>, C4<0>, C4<0>;
+v0x155621b00_0 .net *"_ivl_3", 7 0, L_0x158078010;  1 drivers
+v0x155621bb0_0 .net *"_ivl_4", 15 0, L_0x1556226a0;  1 drivers
+L_0x158078058 .functor BUFT 1, C4<00000000>, C4<0>, C4<0>, C4<0>;
+v0x155621c70_0 .net *"_ivl_7", 7 0, L_0x158078058;  1 drivers
+v0x155621d20_0 .net/s "a", 7 0, v0x155621fa0_0;  1 drivers
+v0x155621e10_0 .net "b", 7 0, v0x1556220f0_0;  1 drivers
+v0x155621ec0_0 .net/s "p", 15 0, L_0x1556227e0;  alias, 1 drivers
+L_0x155622540 .concat [ 8 8 0 0], v0x155621fa0_0, L_0x158078010;
+L_0x1556226a0 .concat [ 8 8 0 0], v0x1556220f0_0, L_0x158078058;
+L_0x1556227e0 .arith/mult 16, L_0x155622540, L_0x1556226a0;
+    .scope S_0x155608cd0;
+T_0 ;
+    %pushi/vec4 0, 0, 32;
+    %store/vec4 v0x155622350_0, 0, 32;
+    %pushi/vec4 0, 0, 32;
+    %store/vec4 v0x1556224a0_0, 0, 32;
+    %pushi/vec4 4294967168, 0, 32;
+    %store/vec4 v0x155622050_0, 0, 32;
+T_0.0 ; Top of for-loop
+    %load/vec4 v0x155622050_0;
+    %cmpi/s 127, 0, 32;
+    %flag_or 5, 4;
+	  %jmp/0xz T_0.1, 5;
+    %pushi/vec4 0, 0, 32;
+    %store/vec4 v0x1556221c0_0, 0, 32;
+T_0.3 ; Top of for-loop
+    %load/vec4 v0x1556221c0_0;
+    %cmpi/s 255, 0, 32;
+    %flag_or 5, 4;
+	  %jmp/0xz T_0.4, 5;
+    %load/vec4 v0x155622050_0;
+    %pad/s 8;
+    %store/vec4 v0x155621fa0_0, 0, 8;
+    %load/vec4 v0x1556221c0_0;
+    %pad/s 8;
+    %store/vec4 v0x1556220f0_0, 0, 8;
+    %delay 1000, 0;
+    %load/vec4 v0x155621fa0_0;
+    %pad/s 16;
+    %pushi/vec4 0, 0, 1;
+    %load/vec4 v0x1556220f0_0;
+    %concat/vec4; draw_concat_vec4
+    %pad/s 16;
+    %mul;
+    %store/vec4 v0x155622260_0, 0, 16;
+    %load/vec4 v0x1556224a0_0;
+    %addi 1, 0, 32;
+    %store/vec4 v0x1556224a0_0, 0, 32;
+    %load/vec4 v0x155622400_0;
+    %load/vec4 v0x155622260_0;
+    %cmp/ne;
+    %jmp/0xz  T_0.6, 6;
+    %load/vec4 v0x155622350_0;
+    %addi 1, 0, 32;
+    %store/vec4 v0x155622350_0, 0, 32;
+    %load/vec4 v0x155622350_0;
+    %cmpi/s 20, 0, 32;
+    %flag_or 5, 4;
+    %jmp/0xz  T_0.8, 5;
+    %load/vec4 v0x155621fa0_0;
+    %load/vec4 v0x155622400_0;
+    %vpi_call/w 3 55 "$display", "Mismatch: a=%0d b=%0d expected=%0d got=%0d", S<1,vec4,s8>, v0x1556220f0_0, v0x155622260_0, S<0,vec4,s16> {2 0 0};
+T_0.8 ;
+T_0.6 ;
+T_0.5 ; for-loop step statement
+    %load/vec4 v0x1556221c0_0;
+    %addi 1, 0, 32;
+    %store/vec4 v0x1556221c0_0, 0, 32;
+    %jmp T_0.3;
+T_0.4 ; for-loop exit label
+T_0.2 ; for-loop step statement
+    %load/vec4 v0x155622050_0;
+    %addi 1, 0, 32;
+    %store/vec4 v0x155622050_0, 0, 32;
+    %jmp T_0.0;
+T_0.1 ; for-loop exit label
+    %vpi_call/w 3 68 "$display", "Mismatches: %0d in %0d samples", v0x155622350_0, v0x1556224a0_0 {0 0 0};
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 5;
+    "N/A";
+    "<interactive>";
+    "-";
+    "signed_unsigned_multiplier_tb.v";
+    "outputs/iter1/response0/signed_unsigned_multiplier.sv";

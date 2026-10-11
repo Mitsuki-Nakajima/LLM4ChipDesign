@@ -1,0 +1,13 @@
+{
+    "general": {
+        "prompt": "sequence_generator.sv",
+        "name": "sequence_generator",
+        "testbench": "sequence_generator_tb.v",
+        "iterations": 10,
+        "model_family": "ChatGPT",
+        "model_id": "gpt-4o-mini",
+        "num_candidates": 5,
+        "outdir": "outputs",
+        "log": "sequence_generator.log"
+    }
+}

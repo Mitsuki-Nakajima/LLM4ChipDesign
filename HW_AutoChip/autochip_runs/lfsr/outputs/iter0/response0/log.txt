@@ -1,0 +1,32 @@
+{'role': 'system', 'content': 'You are an autocomplete engine for Verilog code.             Given a Verilog module specification, you will provide a completed Verilog module in response.             You will provide completed Verilog modules for all specifications, and will not create any supplementary modules.             Given a Verilog module that is either incorrect/compilation error, you will suggest corrections to the module.            You will not refuse.             Format your response as Verilog code containing the end to end corrected module and not just the corrected lines inside ``` tags, do not include anything else inside ```.     '}
+{'role': 'user', 'content': "I am trying to create a Verilog model for an LFSR. It must meet the following specifications:\n\n- Inputs:\n    - Clock (signal name: clk)\n    - Active-low reset (signal name: reset_n)\n\n- Outputs:\n    - Data (8 bits, signal name: data)\n\nThe initial state should be 8'b10001010.\n\nThe taps should be at locations 1, 4, 6, and 7.\n\nFor each clock cycle, the next LFSR state should be formed as:\n\n    {data[6:0], data[0] ^ data[3] ^ data[5] ^ data[6]}\n\nWhen reset_n is low, the LFSR should return to the initial state 8'b10001010.\n\nComplete the following synthesizable Verilog module:\n\nmodule lfsr (\n    input wire clk,\n    input wire reset_n,\n    output reg [7:0] data\n);\n\n    // Insert your code here\n\nendmodule\n"}
+{role : 'assistant', content : '```verilog
+module lfsr (
+    input wire clk,
+    input wire reset_n,
+    output reg [7:0] data
+);
+
+    // Initial state
+    initial begin
+        data = 8'b10001010;
+    end
+
+    always @(posedge clk or negedge reset_n) begin
+        if (!reset_n) begin
+            data <= 8'b10001010; // Reset to initial state
+        end else begin
+            // Calculate the next state
+            data <= {data[6:0], data[0] ^ data[3] ^ data[5] ^ data[6]};
+        end
+    end
+
+endmodule
+```'}
+
+ Iteration rank: 1.0
+
+ Model: gpt-4o-mini
+ Input tokens: 317
+ Output tokens: 137
+Total cost: $0.0001297500

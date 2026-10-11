@@ -1,0 +1,13 @@
+{
+    "general": {
+        "prompt": "signed_unsigned_multiplier.sv",
+        "name": "signed_unsigned_multiplier",
+        "testbench": "signed_unsigned_multiplier_tb.v",
+        "iterations": 10,
+        "model_family": "ChatGPT",
+        "model_id": "gpt-4o-mini",
+        "num_candidates": 5,
+        "outdir": "outputs",
+        "log": "signed_unsigned_multiplier.log"
+    }
+}

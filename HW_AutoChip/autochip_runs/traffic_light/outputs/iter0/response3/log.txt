@@ -1,0 +1,97 @@
+{'role': 'system', 'content': 'You are an autocomplete engine for Verilog code.             Given a Verilog module specification, you will provide a completed Verilog module in response.             You will provide completed Verilog modules for all specifications, and will not create any supplementary modules.             Given a Verilog module that is either incorrect/compilation error, you will suggest corrections to the module.            You will not refuse.             Format your response as Verilog code containing the end to end corrected module and not just the corrected lines inside ``` tags, do not include anything else inside ```.     '}
+{'role': 'user', 'content': 'I am trying to create a Verilog model for a traffic light state machine. It must meet the following specifications:\n\n- Inputs:\n    - Clock (signal name: clk)\n    - Active-low reset (signal name: reset_n)\n    - Enable (signal name: enable)\n\n- Outputs:\n    - Red (signal name: red)\n    - Yellow (signal name: yellow)\n    - Green (signal name: green)\n\nThe state machine should reset to the RED state.\n\nWhile enable is high:\n- Stay RED for 32 clock cycles, then transition to GREEN.\n- Stay GREEN for 20 clock cycles, then transition to YELLOW.\n- Stay YELLOW for 7 clock cycles, then transition back to RED.\n- Repeat this cycle continuously.\n\nWhen enable is low, the state machine should hold its current state and counter.\n\nComplete the following synthesizable Verilog module:\n\nmodule traffic_light_fsm (\n    input wire clk,\n    input wire reset_n,\n    input wire enable,\n    output reg red,\n    output reg yellow,\n    output reg green\n);\n\n    // Insert your code here\n\nendmodule\n'}
+{role : 'assistant', content : '```verilog
+module traffic_light_fsm (
+    input wire clk,
+    input wire reset_n,
+    input wire enable,
+    output reg red,
+    output reg yellow,
+    output reg green
+);
+
+    typedef enum reg [1:0] {
+        RED = 2'b00,
+        GREEN = 2'b01,
+        YELLOW = 2'b10
+    } state_t;
+
+    state_t current_state, next_state;
+    reg [5:0] counter; // Sufficient to count up to 32 + 20 + 7
+
+    // State transition chart
+    always @(posedge clk or negedge reset_n) begin
+        if (!reset_n) begin
+            current_state <= RED;
+            counter <= 0;
+            red <= 1;
+            yellow <= 0;
+            green <= 0;
+        end else if (enable) begin
+            current_state <= next_state;
+            counter <= (counter < 63) ? counter + 1 : 0; // count reset after it reaches maximum
+            
+            // Output logic based on current state
+            case (current_state)
+                RED: begin
+                    if (counter >= 32) begin
+                        next_state <= GREEN;
+                        counter <= 0;
+                    end
+                    red <= 1;
+                    yellow <= 0;
+                    green <= 0;
+                end
+                GREEN: begin
+                    if (counter >= 20) begin
+                        next_state <= YELLOW;
+                        counter <= 0;
+                    end
+                    red <= 0;
+                    yellow <= 0;
+                    green <= 1;
+                end
+                YELLOW: begin
+                    if (counter >= 7) begin
+                        next_state <= RED;
+                        counter <= 0;
+                    end
+                    red <= 0;
+                    yellow <= 1;
+                    green <= 0;
+                end
+                default: begin
+                    next_state <= RED;
+                end
+            endcase
+        end else begin
+            // Hold current state and counter
+            case (current_state)
+                RED: begin
+                    red <= 1;
+                    yellow <= 0;
+                    green <= 0;
+                end
+                GREEN: begin
+                    red <= 0;
+                    yellow <= 0;
+                    green <= 1;
+                end
+                YELLOW: begin
+                    red <= 0;
+                    yellow <= 1;
+                    green <= 0;
+                end
+            endcase
+        end
+    end
+
+endmodule
+```'}
+
+ Iteration rank: 0.25
+
+ Model: gpt-4o-mini
+ Input tokens: 334
+ Output tokens: 506
+Total cost: $0.0003537000

@@ -1,0 +1,73 @@
+{'role': 'system', 'content': 'You are an autocomplete engine for Verilog code.             Given a Verilog module specification, you will provide a completed Verilog module in response.             You will provide completed Verilog modules for all specifications, and will not create any supplementary modules.             Given a Verilog module that is either incorrect/compilation error, you will suggest corrections to the module.            You will not refuse.             Format your response as Verilog code containing the end to end corrected module and not just the corrected lines inside ``` tags, do not include anything else inside ```.     '}
+{'role': 'user', 'content': 'I am trying to create a Verilog model for a traffic light state machine. It must meet the following specifications:\n\n- Inputs:\n    - Clock (signal name: clk)\n    - Active-low reset (signal name: reset_n)\n    - Enable (signal name: enable)\n\n- Outputs:\n    - Red (signal name: red)\n    - Yellow (signal name: yellow)\n    - Green (signal name: green)\n\nThe state machine should reset to the RED state.\n\nWhile enable is high:\n- Stay RED for 32 clock cycles, then transition to GREEN.\n- Stay GREEN for 20 clock cycles, then transition to YELLOW.\n- Stay YELLOW for 7 clock cycles, then transition back to RED.\n- Repeat this cycle continuously.\n\nWhen enable is low, the state machine should hold its current state and counter.\n\nComplete the following synthesizable Verilog module:\n\nmodule traffic_light_fsm (\n    input wire clk,\n    input wire reset_n,\n    input wire enable,\n    output reg red,\n    output reg yellow,\n    output reg green\n);\n\n    // Insert your code here\n\nendmodule\n'}
+{role : 'assistant', content : '```verilog
+module traffic_light_fsm (
+    input wire clk,
+    input wire reset_n,
+    input wire enable,
+    output reg red,
+    output reg yellow,
+    output reg green
+);
+
+    typedef enum reg [1:0] {
+        RED,
+        GREEN,
+        YELLOW
+    } state_t;
+
+    state_t current_state, next_state;
+    reg [5:0] counter; // 6 bits to count up to 64
+
+    // State transition logic
+    always @(posedge clk or negedge reset_n) begin
+        if (!reset_n) begin
+            current_state <= RED;
+            counter <= 0;
+        end else if (enable) begin
+            current_state <= next_state;
+            counter <= (counter < 63) ? counter + 1 : 0; // Wrap around counter
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            RED: begin
+                if (enable && counter == 31) // Stay RED for 32 cycles
+                    next_state = GREEN;
+                else
+                    next_state = RED;
+            end
+            GREEN: begin
+                if (enable && counter == 19) // Stay GREEN for 20 cycles
+                    next_state = YELLOW;
+                else
+                    next_state = GREEN;
+            end
+            YELLOW: begin
+                if (enable && counter == 6) // Stay YELLOW for 7 cycles
+                    next_state = RED;
+                else
+                    next_state = YELLOW;
+            end
+            default: next_state = RED; // Fallback state
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        red = (current_state == RED);
+        yellow = (current_state == YELLOW);
+        green = (current_state == GREEN);
+    end
+
+endmodule
+```'}
+
+ Iteration rank: 0.5
+
+ Model: gpt-4o-mini
+ Input tokens: 334
+ Output tokens: 380
+Total cost: $0.0002781000

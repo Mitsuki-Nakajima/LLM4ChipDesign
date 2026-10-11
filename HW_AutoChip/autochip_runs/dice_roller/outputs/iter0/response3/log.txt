@@ -1,0 +1,41 @@
+{'role': 'system', 'content': 'You are an autocomplete engine for Verilog code.             Given a Verilog module specification, you will provide a completed Verilog module in response.             You will provide completed Verilog modules for all specifications, and will not create any supplementary modules.             Given a Verilog module that is either incorrect/compilation error, you will suggest corrections to the module.            You will not refuse.             Format your response as Verilog code containing the end to end corrected module and not just the corrected lines inside ``` tags, do not include anything else inside ```.     '}
+{'role': 'user', 'content': "I am trying to create a Verilog model for a simulated dice roller. It must meet the following specifications:\n\n- Inputs:\n    - Clock (signal name: clk)\n    - Active-low reset (signal name: rst_n)\n    - Die select (2 bits, signal name: die_select)\n    - Roll (signal name: roll)\n\n- Outputs:\n    - Rolled number (8 bits, signal name: rolled_number)\n\nThe design should simulate rolling either a 4-sided, 6-sided, 8-sided, or 20-sided die, based on the input die_select.\n\nUse the following mapping:\n- die_select = 2'b00: 4-sided die\n- die_select = 2'b01: 6-sided die\n- die_select = 2'b10: 8-sided die\n- die_select = 2'b11: 20-sided die\n\nWhen roll goes high, the design should produce a pseudo-random result within the valid range of the selected die.\n\nComplete the following synthesizable Verilog module:\n\nmodule dice_roller (\n    input wire clk,\n    input wire rst_n,\n    input wire [1:0] die_select,\n    input wire roll,\n    output reg [7:0] rolled_number\n);\n\n    // Insert your code here\n\nendmodule\n"}
+{role : 'assistant', content : '```verilog
+module dice_roller (
+    input wire clk,
+    input wire rst_n,
+    input wire [1:0] die_select,
+    input wire roll,
+    output reg [7:0] rolled_number
+);
+
+    reg [7:0] max_value;
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            rolled_number <= 8'b0;
+            max_value <= 8'b0;
+        end else begin
+            case (die_select)
+                2'b00: max_value <= 4;   // 4-sided die
+                2'b01: max_value <= 6;   // 6-sided die
+                2'b10: max_value <= 8;   // 8-sided die
+                2'b11: max_value <= 20;  // 20-sided die
+                default: max_value <= 0;  // Default case
+            endcase
+            
+            if (roll) begin
+                rolled_number <= $urandom_range(1, max_value); // Generate random number
+            end
+        end
+    end
+
+endmodule
+```'}
+
+ Iteration rank: 1.0
+
+ Model: gpt-4o-mini
+ Input tokens: 376
+ Output tokens: 237
+Total cost: $0.0001986000
